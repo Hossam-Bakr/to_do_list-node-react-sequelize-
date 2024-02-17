@@ -4,18 +4,36 @@ const asyncHandler = require("../utils/asyncHandler");
 const { validationResult } = require("express-validator");
 
 exports.getAllTasks = asyncHandler(async (req, res) => {
-  const tasks = await Task.findAll();
-  res.json({ status: "success", tasks });
+  
+  const tasks = await Task.findAll({
+    where: {
+      userId: req.user.userId
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching tasks:', error);
+  });
+
+  res.json({ status: "success", tasks:tasks });
 });
+
+
 
 exports.ceateTask = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const task = await Task.create(req.body);
-  res.status(201).json({ status: "success", task });
+  const newTask= await Task.create({
+    content : req.body.content , 
+    description : req.body.description,
+    userId :req.user.userId 
+  });
+
+  res.status(201).json({ status: "success", newTask });
 });
+
+
 
 exports.getOneTask = asyncHandler(async (req, res, next) => {
   const task = await Task.findByPk(req.params.id);
@@ -24,6 +42,8 @@ exports.getOneTask = asyncHandler(async (req, res, next) => {
   }
   res.status(201).json({ status: "success", task });
 });
+
+
 
 exports.updateTask = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
@@ -38,6 +58,8 @@ exports.updateTask = asyncHandler(async (req, res) => {
   res.status(201).json({ status: "success", updatedTask });
 });
 
+
+
 exports.updateTaskStatus = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -51,6 +73,8 @@ exports.updateTaskStatus = asyncHandler(async (req, res) => {
   await task.update({ is_complete });
   res.status(201).json({ status: "success", task: task });
 });
+
+
 
 exports.deleteTask = asyncHandler(async (req,res) => { 
     const task = await Task.findByPk(req.params.id);

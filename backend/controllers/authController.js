@@ -19,7 +19,7 @@ exports.login = async (req, res) => {
     );
 
     const { password, ...userWithoutPassword } = user.dataValues;
-
+    req.user = userWithoutPassword;
     return res.status(200).send({
       status: "Success",
       message: "Authentication successfully",
@@ -58,7 +58,6 @@ exports.signup = async (req, res) => {
 exports.logout = async (req, res) => {
   res.status(200).send({
     status: "Success",
-    message:
-      "You have been logged out successfully.",
+    message: "You have been logged out successfully.",
   });
 };
