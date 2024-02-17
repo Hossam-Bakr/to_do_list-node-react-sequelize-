@@ -1,5 +1,6 @@
 const { sequelize } = require('../db');
 const { DataTypes } = require('sequelize');
+const User = require('./UserModel')
 
 const Task = sequelize.define('Task', {
     content: {
@@ -26,6 +27,7 @@ const Task = sequelize.define('Task', {
         }
     }
 });
+Task.belongsTo(User, { foreignKey: 'userId' });
 
 module.exports = Task;
 

@@ -1,15 +1,20 @@
 const express = require('express');
-const apiRoutes = require('./routes');
+const taskRoutes = require('./routes/taskRoutes');
+const authRoutes = require('./routes/authRoutes');
 const { connectToDb } = require('./db');
 const cors = require('cors');
+const dotenv = require('dotenv');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors()); 
+dotenv.config()
+
 
 app.use(express.json());
-app.use('/api/v1', apiRoutes);
+app.use('/api/v1', taskRoutes);
+app.use('/api/v1/user', authRoutes);
 
 // Not found middleware
 app.use((req, res) => {
