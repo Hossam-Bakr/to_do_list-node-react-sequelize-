@@ -1,4 +1,5 @@
-const Task = require("../models");
+const Task = require("../models/taskModel");
+
 const asyncHandler = require("../utils/asyncHandler");
 const { validationResult } = require("express-validator");
 
@@ -38,7 +39,6 @@ exports.updateTask = asyncHandler(async (req, res) => {
 });
 
 exports.updateTaskStatus = asyncHandler(async (req, res) => {
-    console.log("object");
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
