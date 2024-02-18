@@ -1,22 +1,18 @@
-import React, { useContext } from "react";
+import React from "react";
 import * as S from "./styles";
 import Add from "../../Img/add.svg";
-import { AddType } from "../../Contexts/addType";
-import { AddContext } from "../../Contexts/addContext";
 
-const AddTask:React.FC = ()=>{
-    const{setShowAdd} = useContext(AddContext) as AddType;
+interface PropsType {
+  handleClick: () => void;
+}
 
-    function handleClick(){
-        setShowAdd(true);
-    };
-
-    return(
-        <S.Container onClick={handleClick}>
-            <S.Icon src={Add}/>
-            <S.Text>Add a task</S.Text>
-        </S.Container> 
-    );
+const AddTask: React.FC<PropsType> = ({ handleClick }) => {
+  return (
+    <S.Container onClick={handleClick}>
+      <S.Icon src={Add} />
+      <S.Text>Add a task</S.Text>
+    </S.Container>
+  );
 };
 
 export default AddTask;

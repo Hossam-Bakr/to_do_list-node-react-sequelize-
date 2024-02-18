@@ -1,102 +1,156 @@
-import React, {useContext, useState} from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./styles";
-import Logo from "../../Img/Logo.png"
+import Logo from "../../Img/Logo.png";
 import TaskFill from "../../Img/taskFill.png";
 import Settings from "../../Img/settings.svg";
 import Folder from "../../Img/folder.svg";
-import Logout from "../../Img/logout.svg"
+import Logout from "../../Img/logout.svg";
 import SidebarItem from "../../Components/SidebarItem";
 import ExpandSidebarItem from "../../Components/ExpandSidebarItem";
-import TaskCard from "../../Components/TaskCard"; 
+import TaskCard from "../../Components/TaskCard";
 import AddTask from "../../Components/AddTask";
-import { TaskListContext } from "../../Contexts/taskListContext";
-import { TaskListType } from "../../Contexts/taskType";
-import FilterTag from "../../Components/FilterTag";
-import Filter from "../../Img/filter.svg";
-import { DeleteContext } from "../../Contexts/deleteContext";
-import { DeleteType } from "../../Contexts/deleteType";
-import DeleteModal from "../../Components/DeleteModal";
 import AddModal from "../../Components/AddModal";
-import { AddContext } from "../../Contexts/addContext";
-import { AddType } from "../../Contexts/addType";
-import { Link } from "react-router-dom";
-import AuthContext, {AuthType, UserDataProps} from "../../Contexts/authContext";
 
+import axios from "axios";
+import { UserData } from "../../App";
 
-const Home:React.FC = ()=>{
-    const{taskList, doneTasks, notDoneTasks} = useContext(TaskListContext) as TaskListType;
-    const{showDelete} = useContext(DeleteContext) as DeleteType;
-    const{showAdd} =  useContext(AddContext) as AddType;
-    const [listToDisplay, setListToDisplay] = useState(0);
-    const listOfLists = [taskList, doneTasks, notDoneTasks];
+interface PropsType {
+  userToken: string;
+  userData: UserData | undefined;
+  onLogout: () => void;
+}
 
-    const [allActive, setAllActive] = useState(true);
-    const [doneActive, setDoneActive] = useState(false);
-    const [notDoneActive, setNotDoneActive] = useState(false);
+const Home: React.FC<PropsType> = ({ userToken, userData, onLogout }) => {
+  const [userTasks, setUserTasks] = useState<TaskType[]>();
+  const [showAdd, setShowAdd] = useState<boolean>(false);
 
-    const {setUserData} = useContext(AuthContext) as AuthType;
-
-   
-   
-    function handleAll(){
-        setListToDisplay(0);
-        setAllActive(true);
-        setDoneActive(false);
-        setNotDoneActive(false);
+  useEffect(() => {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${userToken}`,
     };
+    axios
+      .get("http://127.0.0.1:3000/api/v1/todos/", { headers: headers })
+      .then((response) => {
+        console.log(response.data.tasks);
+        setUserTasks(response.data.tasks);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userTasks, userToken]);
 
-    function handleDone(){
-        setListToDisplay(1);
-        setAllActive(false);
-        setDoneActive(true);
-        setNotDoneActive(false);
-    };
-    function handleNotDone(){
-        setListToDisplay(2);
-        setAllActive(false);
-        setDoneActive(false);
-        setNotDoneActive(true);
-    };
+  function handleClick() {
+    setShowAdd(true);
+  }
 
-    function handleLogout(){
-        localStorage.removeItem('@Project:email');
-        setUserData({email:""});
-    };
-    return(
-        
-        <S.Page>
-            <S.Sidebar>
-                <S.Img src={Logo}/>
-                <S.Tabs>
-                    <SidebarItem icon={TaskFill} name="Tasks" isActive={true} ></SidebarItem>
-                    <ExpandSidebarItem icon={Folder} name="Categories"  ></ExpandSidebarItem>
-                    <SidebarItem icon={Settings} name="Settings" isActive={false} ></SidebarItem>
-                </S.Tabs>
-                <Link to="/login" style={{ textDecoration: 'none' }} onClick={handleLogout}>
-                    <SidebarItem icon={Logout}name="Logout" isActive={false}></SidebarItem>
-                </Link>
-    
-            </S.Sidebar>
-            <S.Main>
-                <S.Header>All your tasks</S.Header>
-                <S.TitleAndFilter>
-                    <S.Title onClick={handleDone}>Tasks </S.Title>
-                    <S.FilterField>
-                        <div onClick={handleAll}><FilterTag name="All" active={allActive}/></div>
-                        <div onClick={handleDone}><FilterTag name="Done" active={doneActive}/></div>
-                        <div onClick={handleNotDone}><FilterTag name="Not done" active={notDoneActive}/></div>
-                        <S.FilterIcon src={Filter}/>
-                    </S.FilterField>
-                </S.TitleAndFilter>
-                {listOfLists[listToDisplay].map(task =><TaskCard id={task.id} name={task.title} list={task.categorie} color={task.color} done={task.done}/>)}
-                <AddTask></AddTask>
-            </S.Main>
-            {showDelete && <DeleteModal/>}
-            {showAdd && <AddModal/>}
-        </S.Page>
-        
-        
-    );
+  return (
+    <S.Page>
+      <S.Sidebar>
+        <S.Img src={Logo} />
+        <S.Tabs>
+          <SidebarItem
+            icon={TaskFill}
+            name="Tasks"
+            isActive={true}
+          ></SidebarItem>
+          <ExpandSidebarItem
+            icon={Folder}
+            name="Categories"
+          ></ExpandSidebarItem>
+          <SidebarItem
+            icon={Settings}
+            name="Settings"
+            isActive={false}
+          ></SidebarItem>
+        </S.Tabs>
+        <S.Tabs onClick={onLogout}>
+          <SidebarItem
+            icon={Logout}
+            name="Logout"
+            isActive={false}
+          ></SidebarItem>
+        </S.Tabs>
+      </S.Sidebar>
+      <S.Main>
+        <S.Header>Hi {userData && userData.name}</S.Header>
+        <S.Header>All your tasks</S.Header>
+        <S.TitleAndFilter>
+          {/* <S.Title onClick={handleDone}>Tasks </S.Title> */}
+          {/* <S.FilterField>
+            <div onClick={handleAll}>
+              <FilterTag name="All" active={allActive} />
+            </div>
+            <div onClick={handleDone}>
+              <FilterTag name="Done" active={doneActive} />
+            </div>
+            <div onClick={handleNotDone}>
+              <FilterTag name="Not done" active={notDoneActive} />
+            </div>
+            <S.FilterIcon src={Filter} />
+          </S.FilterField> */}
+        </S.TitleAndFilter>
+        {userTasks &&
+          userTasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              name={task.content}
+              list={task.description}
+              //   color={task.color}
+              done={task.is_complete ? true : false}
+            />
+          ))}
+        <AddTask handleClick={handleClick} />
+      </S.Main>
+      {/* {showDelete && <DeleteModal/>} */}
+      {showAdd && <AddModal setShowAdd={setShowAdd} userToken={userToken} />}
+    </S.Page>
+  );
 };
 
 export default Home;
+
+type TaskType = {
+  content: string;
+  createdAt: string;
+  description: string;
+  id: 2;
+  is_complete: string;
+  updatedAt: string;
+  userId: 2;
+};
+
+// const{taskList, doneTasks, notDoneTasks} = useContext(TaskListContext) as TaskListType;
+// const{showDelete} = useContext(DeleteContext) as DeleteType;
+// const{showAdd} =  useContext(AddContext) as AddType;
+// const [listToDisplay, setListToDisplay] = useState(0);
+// const listOfLists = [taskList, doneTasks, notDoneTasks];
+// const [allActive, setAllActive] = useState(true);
+// const [doneActive, setDoneActive] = useState(false);
+// const [notDoneActive, setNotDoneActive] = useState(false);
+// const {setUserData} = useContext(AuthContext) as AuthType;
+
+// function handleAll(){
+//     setListToDisplay(0);
+//     setAllActive(true);
+//     setDoneActive(false);
+//     setNotDoneActive(false);
+// };
+
+// function handleDone(){
+//     setListToDisplay(1);
+//     setAllActive(false);
+//     setDoneActive(true);
+//     setNotDoneActive(false);
+// };
+// function handleNotDone(){
+//     setListToDisplay(2);
+//     setAllActive(false);
+//     setDoneActive(false);
+//     setNotDoneActive(true);
+// };
+
+// function handleLogout(){
+//     localStorage.removeItem('@Project:email');
+//     setUserData({email:""});
+// };

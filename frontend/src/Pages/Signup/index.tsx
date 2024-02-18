@@ -17,7 +17,7 @@ const Signup: React.FC = () => {
     const userData = {
       name: name,
       email: email,
-      password: "password",
+      password: password,
     };
     axios
       .post("http://127.0.0.1:3000/api/v1/user/signup", userData)

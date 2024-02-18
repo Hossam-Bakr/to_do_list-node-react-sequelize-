@@ -10,25 +10,25 @@ import { DeleteType } from "../../Contexts/deleteType";
 
 
 interface TaskCardProps{
-    id:number;
+    key:number;
     name: string;
     list: string;
-    color: string;
+    color?: string;
     done: boolean;
 };
 
-const TaskCard: React.FC<TaskCardProps> =({id, name,list, color, done})=>{
+const TaskCard: React.FC<TaskCardProps> =({key, name,list, color, done})=>{
 
     const{setShowDelete,setId} = useContext(DeleteContext) as DeleteType;
     const{checkTask} = useContext(TaskListContext) as TaskListType;
     
     function handleCheck(){
-        checkTask(id);
+        checkTask(key);
     }
 
     function handleDelete(){
         setShowDelete(true);
-        setId(id);
+        setId(key);
     }
 
     return(
@@ -39,7 +39,7 @@ const TaskCard: React.FC<TaskCardProps> =({id, name,list, color, done})=>{
             <S.Description>
                 <S.Name done={done}>{name}</S.Name>
                 <S.ListBelong>
-                    <S.ColorTag color={color}/>
+                    {/* <S.ColorTag color={color}/> */}
                     <S.ListName>{list}</S.ListName>
                 </S.ListBelong>
             </S.Description>

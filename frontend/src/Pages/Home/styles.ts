@@ -72,3 +72,4 @@ export const FilterIcon = styled.img`
     height: 20px;
     margin: 0 8px;
 `
+

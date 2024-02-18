@@ -34,9 +34,9 @@ const CategoriePage:React.FC = ()=>{
     const{showAdd} =  useContext(AddContext) as AddType;
     const [listToDisplay, setListToDisplay] = useState(0);
     const listOfLists = [
-        taskList.filter(task => task.categorie==name), 
-        doneTasks.filter(task => task.categorie==name), 
-        notDoneTasks.filter(task => task.categorie==name)];
+        taskList.filter(task => task.categorie===name), 
+        doneTasks.filter(task => task.categorie===name), 
+        notDoneTasks.filter(task => task.categorie===name)];
 
     const [allActive, setAllActive] = useState(true);
     const [doneActive, setDoneActive] = useState(false);
@@ -98,11 +98,11 @@ const CategoriePage:React.FC = ()=>{
                         <S.FilterIcon src={Filter}/>
                     </S.FilterField>
                 </S.TitleAndFilter>
-                {listOfLists[listToDisplay].map(task =><TaskCard id={task.id} name={task.title} list={task.categorie} color={task.color} done={task.done}/>)}
-                <AddTask></AddTask>
+                {listOfLists[listToDisplay].map(task =><TaskCard key={task.id} name={task.title} list={task.categorie} color={task.color} done={task.done}/>)}
+                {/* <AddTask></AddTask> */}
             </S.Main>
             {showDelete && <DeleteModal/>}
-            {showAdd && <AddModal/>}
+            {/* {showAdd && <AddModal />} */}
         </S.Page>
         
         
