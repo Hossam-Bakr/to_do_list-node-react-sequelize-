@@ -33,6 +33,8 @@ justify-content:space-around;
 align-items:center;
 `
 
+
+
 export const CancelButton = styled.button`
 background: #d40b0b;
 color: #eee;
@@ -75,8 +77,6 @@ export const TitleInput = styled.input`
     color: #555;
     box-sizing: border-box;
     
-
-
     &:focus{
         border: 1px solid #999;
         outline:none;
@@ -88,34 +88,31 @@ export const TitleInput = styled.input`
 
 `
 
-export const Select = styled.select`
-    
-    width: 32vw;
-    height: 40px;
-    border-radius: 8px;
-    border: 1px solid #999;
-    padding-left:8px;
-    font-size: 20px;
-    color: #555;
-    box-sizing: border-box;
+export const CheckboxInput = styled.input`
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  margin-right: 5px;
 
-    &:focus{
-        border: 1px solid #999;
-        outline:none;
-    }
+  &:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
 
-    &::placeholder{
-        color: #bbb;
-    }
-`
-
+  &:checked::after {
+    content: '\\2713';
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+  }
+`;
 
 export const Text = styled.p`
 font-size:20px;
 color:#555;
 `
-
-
-
-
-

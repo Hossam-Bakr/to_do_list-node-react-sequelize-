@@ -1,52 +1,62 @@
-import React, {useState, useContext} from "react";
+import React from "react";
 import * as S from "./styles";
 import Edit from "../../Img/edit.svg";
 import Erase from "../../Img/erase.svg";
-import { TaskListContext } from "../../Contexts/taskListContext";
-import { TaskListType } from "../../Contexts/taskType";
-import { DeleteContext } from "../../Contexts/deleteContext";
-import { DeleteType } from "../../Contexts/deleteType";
+import axios from "axios";
 
+interface TaskCardProps {
+  id: number;
+  content: string;
+  description: string;
+  color?: string;
+  is_complete: boolean;
+  setTaskId: React.Dispatch<React.SetStateAction<number | undefined>>;
+  onDelete: () => void;
+  onUpdaTe: () => void;
+}
 
+const TaskCard: React.FC<TaskCardProps> = ({
+  id,
+  content,
+  description,
+  is_complete,
+  setTaskId,
+  onDelete,
+  onUpdaTe,
+}) => {
+  function handleCheck() {
+    console.log("checked!");
+  }
 
-interface TaskCardProps{
-    key:number;
-    name: string;
-    list: string;
-    color?: string;
-    done: boolean;
-};
+  const handleUpdate = () => {
+    setTaskId(id);
+    onUpdaTe();
+  };
 
-const TaskCard: React.FC<TaskCardProps> =({key, name,list, color, done})=>{
+  const handleDelete = () => {
+    setTaskId(id);
+    onDelete();
+  };
 
-    const{setShowDelete,setId} = useContext(DeleteContext) as DeleteType;
-    const{checkTask} = useContext(TaskListContext) as TaskListType;
-    
-    function handleCheck(){
-        checkTask(key);
-    }
+  return (
+    <S.Container>
+      <S.CheckField>
+        <S.CheckboxRing onClick={handleCheck}>
+          <S.CheckFill done={is_complete} />
+        </S.CheckboxRing>
+      </S.CheckField>
+      <S.Description>
+        <S.Name done={is_complete}>{content}</S.Name>
+        <S.ListBelong>
+          {/* <S.ColorTag color={color}/> */}
+          <S.ListName>{description}</S.ListName>
+        </S.ListBelong>
+      </S.Description>
 
-    function handleDelete(){
-        setShowDelete(true);
-        setId(key);
-    }
-
-    return(
-        <S.Container>
-            <S.CheckField>
-                <S.CheckboxRing onClick={handleCheck}><S.CheckFill done={done}/></S.CheckboxRing>
-            </S.CheckField>
-            <S.Description>
-                <S.Name done={done}>{name}</S.Name>
-                <S.ListBelong>
-                    {/* <S.ColorTag color={color}/> */}
-                    <S.ListName>{list}</S.ListName>
-                </S.ListBelong>
-            </S.Description>
-            
-            <S.Icon src={Edit}/><S.Icon src={Erase} onClick={handleDelete}/>
-        </S.Container>
-    );
+      <S.Icon src={Edit} onClick={handleUpdate} />
+      <S.Icon src={Erase} onClick={handleDelete} />
+    </S.Container>
+  );
 };
 
 export default TaskCard;

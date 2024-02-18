@@ -4,17 +4,16 @@ import ContextProviders from "./contextProviders";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Pages/Login";
 import Home from "./Pages/Home";
-import CategoriePage from "./Pages/Categorie";
 import ProtectedRoute from "./Routes/Route";
 import Signup from "./Pages/Signup";
 import axios from "axios";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState<UserData |undefined>(undefined);
-  const [userToken, setUserTOken] =useState("");
+  const [userData, setUserData] = useState<UserData | undefined>(undefined);
+  const [userToken, setUserTOken] = useState("");
 
-  const handleLogin = (userData: UserData,token:string) => {
+  const handleLogin = (userData: UserData, token: string) => {
     setIsLoggedIn(true);
     setUserData(userData);
     setUserTOken(token);
@@ -23,8 +22,7 @@ function App() {
   useEffect(() => {
     console.log("user-Data", userData);
     console.log("user-token", userToken);
-  }, [userData,userToken]);
-
+  }, [userData, userToken]);
 
   const logoutHandler = () => {
     axios
@@ -46,7 +44,11 @@ function App() {
             path="/"
             element={
               <ProtectedRoute priv={true}>
-                <Home  userToken={userToken} userData={userData} onLogout={logoutHandler} />
+                <Home
+                  userToken={userToken}
+                  userData={userData}
+                  onLogout={logoutHandler}
+                />
               </ProtectedRoute>
             }
           />
@@ -62,7 +64,11 @@ function App() {
             path="/login"
             element={
               isLoggedIn ? (
-                <Home userToken={userToken} userData={userData} onLogout={logoutHandler} />
+                <Home
+                  userToken={userToken}
+                  userData={userData}
+                  onLogout={logoutHandler}
+                />
               ) : (
                 <ProtectedRoute priv={false}>
                   <Login onLogin={handleLogin} />
@@ -70,14 +76,6 @@ function App() {
               )
             }
           />
-          <Route
-            path="/categorie/:name"
-            element={
-              <ProtectedRoute priv={true}>
-                <CategoriePage />
-              </ProtectedRoute>
-            }
-          ></Route>
         </Routes>
       </BrowserRouter>
       <GlobalStyle />

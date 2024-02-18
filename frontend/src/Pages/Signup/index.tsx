@@ -1,12 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import * as S from "./styles";
 import Logo from "../../Img/Logo.png";
 import { Link, useNavigate } from "react-router-dom";
-// import AuthContext, { AuthType } from "../../Contexts/authContext";
 import axios from "axios";
 
 const Signup: React.FC = () => {
-  //   const { setUserData } = useContext(AuthContext) as AuthType;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +17,7 @@ const Signup: React.FC = () => {
       email: email,
       password: password,
     };
+    console.log(userData);
     axios
       .post("http://127.0.0.1:3000/api/v1/user/signup", userData)
       .then((response) => {

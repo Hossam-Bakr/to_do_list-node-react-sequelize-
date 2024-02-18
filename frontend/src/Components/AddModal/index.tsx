@@ -63,7 +63,7 @@ const AddModal: React.FC<PropsType> = ({ setShowAdd, userToken }) => {
 
         <S.Buttons>
           <S.CancelButton onClick={handleCancel}>Cancel</S.CancelButton>
-          <S.DeletButton onClick={addHandler}>Add</S.DeletButton>
+          <S.AddButton onClick={addHandler}>Add</S.AddButton>
         </S.Buttons>
       </S.Container>
     </S.Background>

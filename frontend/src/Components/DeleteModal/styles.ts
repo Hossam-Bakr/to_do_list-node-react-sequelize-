@@ -41,36 +41,34 @@ export const Buttons = styled.div`
 `
 
 export const CancelButton = styled.button`
-    background: white;
-    border: 1px solid blue;
-    color: blue;
-    width: 120px;
-    height: 40px;
-    border-radius: 8px;
-    font-size: 20px;
-    margin: 8px;
+background: #082ccc;
+color: #eee;
+border: 0px;
+width: 120px;
+height: 40px;
+border-radius: 8px;
+font-size: 20px;
+margin: 8px;
 
-    &:hover{
-        border:2px solid blue;
-        font-weight:500;
-        background: #eee;
-    }
+&:hover{
+    cursor: pointer;
+    background: #0726b0;
+}
 `
 
 export const DeletButton = styled.button`
-    background: white;
-    border: 1px solid red;
-    color:red;
-    width: 120px;
-    height: 40px;
-    border-radius: 8px;
-    font-size: 20px;
-    margin: 8px;
+background: #d40b0b;
+border: 0px;
+color:#eee;
+width: 120px;
+height: 40px;
+border-radius: 8px;
+font-size: 20px;
+margin: 8px;
 
-    &:hover{
-        border:2px solid red;
-        font-weight:500;
-        background: #eee;
-    }
-    
+
+&:hover{
+    background: #a30707;
+    cursor: pointer;
+}
 `
